@@ -1,0 +1,174 @@
+root password: {SSHA}SV51MRe7J/ZqLPbdcpaScvrbyggX28Rm
+vitali_shulhach ssl password: uvEQCcITcwk3Y (password)
+
+[root@ldapserver vagrant]# cd /usr/share/openldap-servers/
+[root@ldapserver openldap-servers]# ls
+DB_CONFIG.example  slapd.conf.obsolete  slapd.ldif.example
+[root@ldapserver openldap-servers]# less DB_CONFIG.example 
+[root@ldapserver openldap-servers]# cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+[root@ldapserver openldap-servers]# chown -R ldap:ldap /var/lib/ldap
+[root@ldapserver openldap-servers]# cd /etc/openldap
+[root@ldapserver openldap]# ls
+certs  check_password.conf  ldap.conf  schema  slapd.d
+[root@ldapserver openldap]# mv slapd.d slapd.d.original
+[root@ldapserver openldap]# slappasswd
+New password: 
+Re-enter new password: 
+{SSHA}SV51MRe7J/ZqLPbdcpaScvrbyggX28Rm
+[root@ldapserver openldap]# less /etc/openldap/slapd.conf
+/etc/openldap/slapd.conf: No such file or directory
+[root@ldapserver openldap]# pwd
+/etc/openldap
+[root@ldapserver openldap]# vim 
+[root@ldapserver openldap]# vim slapd.conf
+[root@ldapserver openldap]# vim slapd.conf
+[root@ldapserver openldap]# slaptest -u
+config file testing succeeded
+[root@ldapserver openldap]# chown -R ldap:ldap /var/lib/ldap
+[root@ldapserver openldap]# service slapd start
+Starting slapd:                                            [  OK  ]
+[root@ldapserver openldap]# slapcat
+57ee2a7f The first database does not allow slapcat; using the first available one (2)
+[root@ldapserver openldap]# vim /etc/openldap/ldap-init.ldif
+[root@ldapserver openldap]# ldapadd -x -D "cn=admin,dc=mnt,dc=lab" -W -f /etc/openldap/ldap-init.ldif
+Enter LDAP Password: 
+adding new entry "dc=mnt,dc=lab"
+
+adding new entry "ou=People,dc=mnt,dc=lab"
+
+adding new entry "ou=Groups,dc=mnt,dc=lab"
+
+adding new entry "ou=Services,dc=mnt,dc=lab"
+
+[root@ldapserver openldap]# ldapsearch -h localhost -D "cn=admin,dc=mnt,dc=lab" -W -b "dc=mnt,dc=lab" -s sub "objectclass=*"
+Enter LDAP Password: 
+# extended LDIF
+#
+# LDAPv3
+# base <dc=mnt,dc=lab> with scope subtree
+# filter: objectclass=*
+# requesting: ALL
+#
+
+# mnt.lab
+dn: dc=mnt,dc=lab
+dc: mnt
+objectClass: top
+objectClass: domain
+
+# People, mnt.lab
+dn: ou=People,dc=mnt,dc=lab
+ou: People
+objectClass: top
+objectClass: organizationalUnit
+
+# Groups, mnt.lab
+dn: ou=Groups,dc=mnt,dc=lab
+ou: Groups
+objectClass: top
+objectClass: organizationalUnit
+
+# Services, mnt.lab
+dn: ou=Services,dc=mnt,dc=lab
+ou: Services
+objectClass: top
+objectClass: organizationalUnit
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 5
+# numEntries: 4
+[root@ldapserver openldap]# vim /etc/openldap/ldap-userinldap.ldif
+[root@ldapserver openldap]# ldapadd -x -D "cn=admin,dc=mnt,dc=lab" -W -f /etc/openldap/ldap-userinldap.ldif
+Enter LDAP Password: 
+adding new entry "cn=vitali_shulhach,ou=Groups,dc=mnt,dc=lab"
+
+adding new entry "uid=vitali_shulhach,ou=People,dc=mnt,dc=lab"
+
+
+
+Хыстори - парт2
+    1  yum search openldap*
+    2  yum search openldap
+    3  yum install openldap-servers openldap-clients
+    4  cd /usr/share/openldap-servers/
+    5  ls
+    6  less DB_CONFIG.example 
+    7  cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+    8  chown -R ldap:ldap /var/lib/ldap
+    9  cd /etc/openldap
+   10  ls
+   11  mv slapd.d slapd.d.original
+   12  slappasswd
+   13  less /etc/openldap/slapd.conf
+   14  pwd
+   15  vim 
+   16  vim slapd.conf
+   17  vim slapd.conf
+   18  slaptest -u
+   19  chown -R ldap:ldap /var/lib/ldap
+   20  service slapd start
+   21  slapcat
+   22  vim /etc/openldap/ldap-init.ldif
+   23  ldapadd -x -D "cn=admin,dc=mnt,dc=lab" -W -f /etc/openldap/ldap-init.ldif
+   24  ldapsearch -h localhost -D "cn=admin,dc=mnt,dc=lab" -W -b "dc=mnt,dc=lab" -s sub "objectclass=*"
+   25  vim /etc/openldap/ldap-userinldap.ldif
+   26  ldapadd -x -D "cn=admin,dc=mnt,dc=lab" -W -f /etc/openldap/ldap-userinldap.ldif
+   27  ldapsearch -h localhost -D "cn=admin,dc=mnt,dc=lab" -W -b "dc=mnt,dc=lab" -s sub "uid=vitali_shulhach"
+   28  yum install -y phpldapadmin
+   29  yum install httpd -y
+   30  cd /etc/httpd/conf.d/
+   31  ls
+   32  vim phpldapadmin.conf 
+   33  cd ..
+   34  cd conf
+   35  ls
+   36  vim httpd.conf 
+   37  hostname -I
+   38  vim httpd.conf 
+   39  cd ../conf.d/
+   40  vim phpldapadmin.conf 
+   41  vim php.conf 
+   42  vim phpldapadmin.conf 
+   43  vim /etc/phpldapadmin/config.php
+   44  service httpd start
+   45  vim phpldapadmin.conf 
+   46  service httpd start
+   47  curl -IL ldapadmin 
+   48  curl -IL localhost
+   49  curl -IL localhost/ldapadmin
+   50  vim phpldapadmin.conf 
+   51  service httpd restart
+   52  curl -IL http://ldapadmin
+   53  vim phpldapadmin.conf 
+   54  service httpd restart
+   55  vim ../conf/httpd.conf 
+   56  service httpd restart
+   57  curl -IL localhost/ldapadmin
+   58  curl -IL localhost/ldapadmin
+   59  curl -IL localhost/ldapadmin/
+   60  vim phpldapadmin.conf 
+   61  service httpd restart
+   62  curl -IL localhost/ldapadmin/
+   63  yum info phpldapadmin
+   64  vim phpldapadmin.conf 
+   65  ldapsearch -h localhost -D "cn=admin,dc=mnt,dc=lab" -W -b "dc=mnt,dc=lab" -s sub "uid=vitali_shulhach"
+   66  cd /etc/openldap/ldap-init.ldif
+   67  cd /etc/openldap/
+   68  ls
+   69  vim ldap-init.ldif 
+   70  vim ldap.conf 
+   71  vim slapd.conf 
+   72  vim ldap-userinldap.ldif 
+   73  cat ldap-userinldap.ldif 
+   74  ldapsearch -h localhost -D "cn=admin,dc=mnt,dc=lab" -W -b "dc=mnt,dc=lab" -s sub "uid=vitali_shulhach"
+   75  ldapsearch -h localhost -D "cn=admin,dc=mnt,dc=lab" -W -b "dc=mnt,dc=lab" -s sub "uid=vitali_shulhach"
+   76  ldapsearch -h localhost -D "cn=admin,dc=mnt,dc=lab" -W -b "dc=mnt,dc=lab" -s sub "objectclass=*"
+   77  ldapsearch -h localhost -D "cn=admin,dc=mnt,dc=lab" -W -b "dc=mnt,dc=lab" -s sub "objectclass=*"
+   78  ldapsearch -h localhost -D "cn=admin,dc=mnt,dc=lab" -W -b "dc=mnt,dc=lab" -s sub "objectclass=*"
+   79  history
+
+
+

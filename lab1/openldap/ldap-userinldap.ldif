@@ -1,0 +1,27 @@
+#userinldap, Groups, mnt.lab
+dn: cn=vitali_shulhach,ou=Groups,dc=mnt,dc=lab
+cn: vitali_shulhach
+gidNumber: 10500
+objectClass: posixGroup
+objectClass: top
+memberUid: vitali_shulhach
+
+# userinldap, People, mnt.lab
+dn: uid=vitali_shulhach,ou=People,dc=mnt,dc=lab
+uid: vitali_shulhach
+homeDirectory: /home/vitali_shulhach
+loginShell: /bin/bash
+mail: vitali_shulhach@epam.com
+uidNumber: 10500
+gidNumber: 10500
+gecos: vitali shulhach
+cn: vitali shulhach
+givenName: Vitali
+sn: Shulhach
+objectClass: top
+objectClass: posixAccount
+objectClass: shadowAccount
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+userPassword: uvEQCcITcwk3Y 
